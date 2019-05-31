@@ -3,7 +3,7 @@
 
 <head>
 
-  <title>Realtime communication with WebRTC</title>
+  <title>WebRTC test</title>
 
   <link rel="stylesheet" href="css/main.css" />
 
@@ -11,7 +11,14 @@
 
 <body>
 
-  <h1>Realtime communication with WebRTC</h1>
+  <h1>WebRTC sample</h1>
+
+  <div id='msgframe'></div>
+  <input type="text" name="textinput"><button id='sendText'>Send</button>
+  <!-- This file is automatically added/served when running "node index.js". -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  <script src="js/main.js"></script>
 
 </body>
 

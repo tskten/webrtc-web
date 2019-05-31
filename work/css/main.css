@@ -6,3 +6,13 @@ video {
   max-width: 100%;
   width: 320px;
 }
+
+#msgframe {
+    width: 400px;
+    height: 500px;
+    background: lightgrey;
+}
+
+.msgentry {
+
+}
