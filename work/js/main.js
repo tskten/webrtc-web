@@ -17,11 +17,12 @@ var g={
   pc:null
 }
 
-var signaling ={
+var signaling = {
   room:'foo',
   socket:null,
-  init: () => {
-    this.socket=socket=io.connect();
+  init: function() {
+    var socket=io.connect();
+    this.socket=socket;
     socket.on('created', (room) => {
       console.log('Created room ' + room);
       g.isInitiator = true;
@@ -66,15 +67,15 @@ var signaling ={
       }
     });
   },
-  join: () => {
+  join: function() {
     if (this.room !== '') {
       this.socket.emit('create or join', this.room);
       console.log('Attempted to create or join room', this.room);
     }
   },
-  sendMessage: (message) => {
+  sendMessage: function(message) {
     console.log('Client sending message: ', message);
-    socket.emit('message', message);
+    this.socket.emit('message', message);
   },
   leave() {
     console.log('leave room.');
@@ -92,7 +93,7 @@ var signaling ={
 /////////////////////////////////////////////////////////
 
 var peerConnection = {
-  createPeerConnection: () => {
+  createPeerConnection: function () {
     try {
       pc = new RTCPeerConnection(null);
       pc.onicecandidate = this.onIceCandidate;
@@ -104,7 +105,7 @@ var peerConnection = {
       return;
     }
   },
-  onIceCandidate: (event) => {
+  onIceCandidate: function(event) {
     console.log('icecandidate event: ', event);
     if (event.candidate) {
       signaling.sendMessage({
@@ -117,26 +118,26 @@ var peerConnection = {
       console.log('End of candidates.');
     }
   },
-  onCreateOfferError: (event) => {
+  onCreateOfferError: function(event) {
     console.log('createOffer() error: ', event);
   },
-  offer: () => {
+  offer: function() {
     console.log('Sending offer to peer');
     g.pc.createOffer(setLocalAndSendMessage, handleCreateOfferError);
   },
-  answer: () => {
+  answer: function() {
     console.log('Sending answer to peer.');
     g.pc.createAnswer().then(
       setLocalAndSendMessage,
       onCreateSessionDescriptionError
     );
   },
-  setLocalAndSendMessage: (sessionDescription) => {
+  setLocalAndSendMessage:function (sessionDescription) {
     pc.setLocalDescription(sessionDescription);
     console.log('setLocalAndSendMessage sending message', sessionDescription);
     signaling.sendMessage(sessionDescription);
   },
-  onCreateSessionDescriptionError: (error) => {
+  onCreateSessionDescriptionError: function(error) {
     trace('Failed to create session description: ' + error.toString());
   }
 }
